@@ -11,23 +11,27 @@ Applying feature scaling and preprocessing
 Training and evaluating classification models
 Comparing Logistic Regression vs Deep Learning performance
 
-📂 Repository Structure
-End_to_end_Audiobook_customer/
+EndtoEnd_ML_Audiobook_project/
 │
-├── Datasets/                         
-│   ├── Audiobook_initial.csv
-│   ├── Audiobooks_data.csv
+├── Jupyter_notebooks/         # Training notebooks
+│   ├── Model_logistic_Regression_audiobook.ipynb
+│   ├── Model_deeplearning_Audiobook.ipynb
+│   ├── Outlier_treatment_Audiobook.ipynb
+│   └── ...
+│
+├── Datasets/                  # Input data
 │   ├── audiobook_outlier_treated.csv
+│   └── audioboook_scaled.csv
 │
-├── Jupyter_notebooks/                
-│   ├── 01_Initial_check_Audiobook.ipynb
-│   ├── 02_Outlier_treatment_Audiobook.ipynb
-│   ├── 03_Feature_scaling_Audiobook.ipynb
-│   ├── 04_Model_Logistic_Regression_Audiobook.ipynb
-│   ├── 05_Model_DeepLearning_Audiobook.ipynb
+├── Models/                    # Saved models
+│   ├── logistic_model.pkl
+│   └── deep_learning_model.h5
 │
+├── app_logistic.py            # Flask API for Logistic Regression
+├── app_deeplearning.py        # Flask API for Deep Learning
+├── requirements.txt           # Dependencies
+├── README.md                  # Project documentation
 
-└── README.md
 
 Tech Stack
 
@@ -60,11 +64,107 @@ We have used SMOTE to reduce the inbalance in the daseset and thus we acheived t
 
 Insights: Customer engagement features like Minutes Listened and Completion Percentage were strong predictors.
 
+Models
+Logistic Regression
+ Trained on scaled features
+ Serves as baseline model
+
+Deep Learning
+ hidden layers with ReLUDropout for regularization
+ Sigmoid output for binary classification
+
+Using the Deployed Models
+
+Both models are deployed as Flask APIs.
+
+1️) Run the APIs
+
+Open two terminals:
+
+# Terminal 1: Logistic Regression API
+python app_logistic.py
+
+# Terminal 2: Deep Learning API
+python app_deeplearning.py
+
+You’ll see:
+Running on http://127.0.0.1:5000
+
+2️) Test Logistic Regression API
+
+Endpoint:
+POST http://127.0.0.1:5000/predict
+
+Request example:
+
+import requests
+url = "http://127.0.0.1:5000/predict"
+headers = {"Content-Type": "application/json"}
+
+data = {
+    "Book_length_min": 300,
+    "Book_length_char": 150000,
+    "Avg_rating": 4.5,
+    "Rating_count": 1200,
+    "Review_score": 8,
+    "Price": 20,
+    "Discount": 2,
+    "Total_minutes_listened": 150,
+    "Completion": 60,
+    "Support_requests": 0,
+    "Support_request": 0
+}
+
+response = requests.post(url, headers=headers, json=data)
+print(response.json())
 
 
+Example response:
+{"LogisticRegression_Prediction": 1}
+
+Test Deep Learning API
+
+Endpoint:
+POST http://127.0.0.1:5000/predict
+
+
+Request example:
+
+import requests
+url = "http://127.0.0.1:5000/predict"
+headers = {"Content-Type": "application/json"}
+
+data = {
+    "Book_length_min": 300,
+    "Book_length_char": 150000,
+    "Avg_rating": 4.5,
+    "Rating_count": 1200,
+    "Review_score": 8,
+    "Price": 20,
+    "Discount": 2,
+    "Total_minutes_listened": 150,
+    "Completion": 60,
+    "Support_requests": 0,
+    "Support_request": 0
+}
+
+response = requests.post(url, headers=headers, json=data)
+print(response.json())
+
+Example response:
+
+{
+  "DeepLearning_Prediction": 1,
+  "Probability": 0.8734
+}
+
+ Notes
+
+JSON keys must match the training dataset feature names.
+Logistic Regression returns only a binary prediction (0/1).
+Deep Learning returns prediction and probability.
 
 Pranav A Kumar
-
 https://www.linkedin.com/in/pranav-a-kumar-2a39b4358/
 https://github.com/Pranav-Anil44
 
