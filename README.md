@@ -37,7 +37,7 @@ Tech Stack
 
 Python
 
-Libraries: pandas, numpy, matplotlib, seaborn, scikit-learn, imbalanced-learn, tensorflow/keras
+Libraries: pandas, numpy, matplotlib, seaborn, scikit-learn, imbalanced-learn, tensorflow/keras,Flask
 
  Workflow
 
